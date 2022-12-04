@@ -1,0 +1,139 @@
+<template> 
+
+    <lightning-card
+     title="Mortgage Calculator"
+      icon-name="action:refresh">
+        <div class="slds-grid slds-gutters"> 
+  <div class="slds-col slds-size_2-of-6">
+        <div class='slds-var-m-around_medium'>
+            <lightning-input
+             type="number" 
+             name="MortAmount"
+              label="Mortgage Amount:($)"
+               placeholder="e.g. $10000"
+                required
+                 onchange={onChangeAmount}>
+            </lightning-input>
+        </div>
+        <div class='slds-var-m-around_medium'>
+            <lightning-input
+             type="number" 
+             step="any"
+              name="Rate" 
+              label="Interest Rate:(%)"
+               placeholder="e.g. 2.5%"
+                required
+                onchange={onChangeInterest}>
+            </lightning-input>
+        </div>
+        <div class='slds-var-m-around_medium'>
+            <lightning-input
+             type="number"
+              name="Amore"
+               label="Amortization:(years)"
+                placeholder="e.g. 2 years"
+                 required
+                onchange={onChangeAmort}>
+            </lightning-input>
+        </div>
+        <div class='slds-var-m-around_medium'>
+            <lightning-combobox
+             options={options}
+              placeholder="Select Frequency" 
+              label="Payment Frequency:"
+               required
+                onchange={comboboxHandler}>
+            </lightning-combobox>
+        </div>
+        <div>
+            <lightning-button 
+            label="Get the Result!"
+             variant="Neutral"
+              onclick={getResultHandler}
+                class="slds-m-left_x-small">
+            </lightning-button>
+
+            <lightning-button 
+            label="Save the Result!"
+             variant="Neutral" 
+             onclick={saveResultHandler}
+                class="slds-m-left_x-small">
+            </lightning-button>
+            <lightning-button 
+            label="Clear!"
+             variant="Neutral" 
+             onclick={clearHandler} 
+            class="slds-m-left_x-small"> 
+            </lightning-button>
+        </div>
+
+        <template if:true={result}> 
+            <div class="slds-var-m-around_large"> 
+            <p>Amount:   <strong>{result.yearlyPayment}</strong></p> 
+             <p> Partial Payment: <strong>{result.partialAmount}</strong></p>  
+             <p>Payment type: <strong> {result.partialPmtType}</strong></p>     
+            </div>   
+        </template> 
+    </div>
+        <div class="slds-col slds-size_4-of-6">
+            <!-- Placing child component and passing values -->
+            <template if:true={chartConfiguration}>
+                <c-chart chart-config={chartConfiguration}></c-chart>
+            </template>
+        </div>
+    </div>
+       
+    </lightning-card>
+
+
+
+    <lightning-card title="Mortgage Calculation History">
+        
+        <div class="slds-grid slds-gutters slds-wrap justify-center slds-m-right_large">
+                
+
+                     <template for:each={mortData.data} for:item="item">
+                <div key={item.id} class="slds-m-around_large" style="background-color: rgb(75, 234, 237); padding:8px 8px 8px 8px; width: 300px; border-radius: 5px; border:1px solid black; font-size: 15px; box-shadow: 10px 10px 5px lightblue" >
+                    
+                    <strong style="color: green">Name: </strong><strong>{item.Name}</strong> <br>
+
+                    <strong style="color: red">Mortgage Amount: </strong> <strong>{item.Mortgage_Amount__c}</strong>  <br>
+
+                   <strong style="color:rgb(195, 87, 16)">Interest Rate:       </strong> <strong>{item.Interest_Rate__c}</strong> <br>
+                   
+                   <strong style="color:rgb(4, 16, 105)">Amortization: </strong> <strong>{item.Amortization__c}</strong> <br>
+
+                   <strong style="color:rgb(84, 4, 66)">Payment Fequency: </strong> <strong>{item.Payment_Frequency__c}</strong> <br> 
+
+                   <strong style="color:rgb(80, 62, 2)">Partial Payment: </strong> <strong>{item.Partial_Amount__c}</strong> <br> 
+
+
+                   <strong style="color:rgb(61, 9, 79)">Total Amount: </strong> <strong>{item.Total_amount__c}</strong> <br> 
+
+                  
+                    <lightning-button label="Visit" icon-name="action:share_link" class="slds-m-right_small slds-m-left_x-large" onclick={visitHandler}> </lightning-button>
+
+
+                   <lightning-button
+                    label="Delete" 
+                    icon-name="action:delete" 
+                    onclick={deleteHandler}
+                    name={item.id}> </lightning-button>
+
+                  
+
+                   
+                    
+                    
+                </div>
+            </template>
+        </div>
+                
+
+            
+           
+        
+       
+    
+    </lightning-card>
+</template> 
